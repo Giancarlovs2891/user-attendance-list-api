@@ -37,7 +37,7 @@ public class UserService {
 	public int delete(String id) {
 		List<User> users = Data.USER;
 		for (User user : users) {
-			if (user.getId().equals(id)) {
+			if (user.getId().equals(id) && user.getStatus().equals(UserStatus.ACTIVE)) {
 				user.setStatus(UserStatus.INACTIVE);;
 				return 200;
 			}
@@ -45,10 +45,10 @@ public class UserService {
 		return 404;
 	}
 
-	private boolean exist(String id) {
+	public boolean exist(String id) {
 		List<User> users = Data.USER;
 		for (User user : users) {
-			if (user.getId().equals(id)) {
+			if (user.getId().equals(id) && user.getStatus().equals(UserStatus.ACTIVE)) {
 				return true;
 			}
 		}

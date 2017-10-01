@@ -1,5 +1,6 @@
 package co.gvalencia.test.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import co.gvalencia.test.data.Data;
@@ -21,9 +22,18 @@ public class AttendanceService {
 		}
 	}
 
-	public List<Attendance> report(String date) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Attendance> report(String dateFrom, String dateTo) {
+		dateFrom = reverseDate(dateFrom);
+		dateTo = reverseDate(dateTo);
+		UserService userService = new UserService();
+		List<Attendance> attendances = new ArrayList<Attendance>();
+		for (Attendance attendance : Data.ATTENDANCE) {
+			String currentDate = reverseDate(attendance.getDate());
+			if ((currentDate.compareTo(dateFrom) >= 0 && currentDate.compareTo(dateTo) <= 0) && userService.exist(attendance.getUserId())) {
+				attendances.add(attendance);
+			}
+		}
+		return attendances;
 	}
 
 	private boolean exist(String userId, String date) {
@@ -34,6 +44,12 @@ public class AttendanceService {
 			}
 		}
 		return false;
+	}
+
+	private String reverseDate(String date) {
+		String[] sd = date.split("-");
+		date = sd[2] + "-" + sd[1] + "-" + sd[0];
+		return date;
 	}
 
 }
